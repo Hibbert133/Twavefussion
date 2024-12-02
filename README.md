@@ -20,9 +20,9 @@ We apply our method on four datasets, the SWAT and WADI datasets, in which we di
 
 - Train and detect:
 
-> CUDA_VISIBLE_DEVICES={gpu_id} python main.py  --config test.yml  --doc ./{dataset}  --sequence
+> CUDA_VISIBLE_DEVICES = {gpu_id} python main.py  --config test.yml  --doc ./{dataset}  --sequence
 
-> Then you will train the whole model and will get the reconstructed data and detected score.
+Then you will train the whole model and will get the reconstructed data and detected score.
 
 ## How to run with your own data
 
