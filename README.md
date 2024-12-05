@@ -35,4 +35,4 @@ Then you will train the whole model and will get the reconstructed data and dete
 We  use dataset PSM for testing demonstration, you can run main.py directly and get the corresponding result.
 
 ## References
-Our implementation is based on [TimeADDM]: https://github.com/Hurongyao/TIMEADDM. We would like to thank them
+Our implementation is based on [TimeADDM](https://github.com/Hurongyao/TIMEADDM). We would like to thank them
