@@ -14,7 +14,7 @@ This repository contains code for the paper, TWavefussion: Wavelet-based Diffusi
 3. WADI (Water Distribution) is obtained from 127 sensors of the critical infrastructure system under continuous operations. 
 4. SWAT (Secure Water Treatment) is obtained from 51 sensors of the critical infrastructure system under continuous operations. 
 
-We apply our method on four datasets, the SWAT and WADI datasets, in which we did not upload data in this repository.Please refer to [https://itrust.sutd.edu.sg/](https://itrust.sutd.edu.sg/) and send request to iTrust is you want to try the data.
+We apply our method on four datasets, the SWAT and WADI datasets, in which we did not upload data in this repository. Please refer to [https://itrust.sutd.edu.sg/](https://itrust.sutd.edu.sg/) and send request to iTrust is you want to try the data.
 
 ## How to run
 
@@ -33,3 +33,6 @@ Then you will train the whole model and will get the reconstructed data and dete
 ## Result
 
 We  use dataset PSM for testing demonstration, you can run main.py directly and get the corresponding result.
+
+## References
+Our implementation is based on [TimeADDM]: https://github.com/Hurongyao/TIMEADDM. We would like to thank them
