@@ -13,7 +13,7 @@ model:
     type: "simple"
     input_size : 32
     in_channels: 3
-    out_ch: 25
+    out_ch: 16
     ch: 32
     ch_mult: [2, 2, 2, 4]
     num_res_blocks: 2
