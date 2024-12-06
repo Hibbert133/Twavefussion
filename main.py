@@ -9,9 +9,9 @@ import torch
 import numpy as np
 import TIMEEMB2 as emb
 import torch.utils.tensorboard as tb
-import UnetProcessing as uprocessing 
+# import UnetProcessing as uprocessing 
 
-from runners.diffusion3 import Diffusion
+from runners.diffusion2 import Diffusion
 # from diffusion import Diffusion
 
 torch.set_printoptions(sci_mode=False)
@@ -183,7 +183,7 @@ def main():
             emb.main()
             #The corresponding parameters of the different datasets are as follows,if you change the dataset, you should modify the parameters in TIMEEMB.py.
             print("Diffusion step")
-            runner.wavefusion()
+            runner.wavefussion()
     except Exception:
         logging.error(traceback.format_exc())
 
