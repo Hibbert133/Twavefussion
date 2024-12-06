@@ -32,7 +32,7 @@ from pytorch_wavelets import DWT1DForward, DWT1DInverse
 
 
 from early_stopping2 import EarlyStopping
-# 禁用终端日志输出
+# The terminal log output is disabled
 logging.getLogger().handlers.clear()
 
 # 或者添加一个空处理器（不会输出任何东西）
@@ -205,7 +205,7 @@ class Diffusion(object):
             dataset = dataset.fillna(dataset.mean())
             dataset=dataset.values[:, 0:-1]
             dataset=dataset.astype(np.float32)
-            scaler = MinMaxScaler(feature_range=(0, 1))  # 定义MinMaxScaler并设置范围为0-1
+            scaler = MinMaxScaler(feature_range=(0, 1))  
             dataset = scaler.fit_transform(dataset)
 
             ckpt1 = torch.load(
@@ -223,7 +223,7 @@ class Diffusion(object):
             dataset =dataset.fillna(dataset.mean())
             dataset = dataset.values[:, 1:]
             dataset=dataset.astype(np.float32)
-            scaler = MinMaxScaler(feature_range=(0, 1))  # 定义MinMaxScaler并设置范围为0-1
+            scaler = MinMaxScaler(feature_range=(0, 1))  
             dataset = scaler.fit_transform(dataset)
             
 
@@ -264,16 +264,16 @@ class Diffusion(object):
         # num_layers = 2  
         # ff_dim = 128 
         ######SWAT########
-        # input_dim = 51   # 输入特征维度
-        # embed_dim = 64  # 嵌入维度
-        # num_heads = 4    # 多头注意力的头数
-        # num_layers = 1   # 编码器/解码器的层数
+        # input_dim = 51  
+        # embed_dim = 64 
+        # num_heads = 4  
+        # num_layers = 1   
         # ff_dim = 128  
         ######WADI########
-        # input_dim = 127   # 输入特征维度
-        # embed_dim = 128  # 嵌入维度
-        # num_heads = 8    # 多头注意力的头数
-        # num_layers = 1   # 编码器/解码器的层数
+        # input_dim = 127  
+        # embed_dim = 128  
+        # num_heads = 8    
+        # num_layers = 1  
         # ff_dim = 256  
 
 
@@ -597,7 +597,7 @@ class Diffusion(object):
             if (args.dataset == 'SMAP'):
                 print('load SMAP')
                 testdata = np.load('./data/SMAP/SMAP/SMAP_test.npy')
-                scaler = MinMaxScaler(feature_range=(0, 1))  # 定义MinMaxScaler并设置范围为0-1
+                scaler = MinMaxScaler(feature_range=(0, 1))  
                 testdata = scaler.fit_transform(testdata)
                 label = np.load('./data/SMAP/SMAP/SMAP_test_label.npy')
                 testdata = testdata
@@ -621,7 +621,7 @@ class Diffusion(object):
                 testdata =testdata.fillna(testdata.mean())
                 testdata = testdata.values[:, 0:-2]
                 testdata = testdata.astype(np.float32)
-                scaler = MinMaxScaler(feature_range=(0, 1))  # 定义MinMaxScaler并设置范围为0-1
+                scaler = MinMaxScaler(feature_range=(0, 1))  
                 testdata = scaler.fit_transform(testdata)
 
                 
