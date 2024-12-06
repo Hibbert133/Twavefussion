@@ -23,10 +23,10 @@ from datasets import get_dataset, data_transform, inverse_data_transform
 from functions.ckpt_util import get_ckpt_path
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
-from ranger import Ranger
+# from ranger import Ranger
 import torchvision.utils as tvu
 import argparse
-from WTConv import WTConv1d 
+# from WTConv import WTConv1d 
 from pytorch_wavelets import DWT1DForward, DWT1DInverse
 # from SelfAtten import AttentionFusionModel
 
@@ -42,7 +42,7 @@ logging.basicConfig(level=logging.WARNING)
 logging.info("This will not be shown in the terminal.")
 logging.warning("This will be shown in the terminal.")
 
-early_stopping = EarlyStopping('./earlysave13')   
+early_stopping = EarlyStopping('./earlysave')   
 
 
 
@@ -50,7 +50,7 @@ parser = argparse.ArgumentParser(description='LSTM_AE TOY EXAMPLE')
 parser.add_argument('--batch-size', type=int, default= 16, metavar='N',
                     help='input batch size for training (default: 128)')
 parser.add_argument('--epochs', type=int, default=200, metavar='N', help='number of epochs to train')
-parser.add_argument('--optim', default='Adam', type=str, help='Optimizer to use')
+parser.add_argument('--optim', default='AdamW', type=str, help='Optimizer to use')
 parser.add_argument('--hidden-size', type=int, default=64, metavar='N', help='LSTM hidden state size')
 parser.add_argument('--lr', type=float, default=0.0001, metavar='LR', help='learning rate')#0.001
 parser.add_argument('--input-size', type=int, default=25, metavar='N', help='input size')
@@ -62,7 +62,7 @@ parser.add_argument('--model-type', default='LSTMAE', help='currently only LSTMA
 parser.add_argument('--model-dir', default='trained_models', help='directory of model for saving checkpoint')
 parser.add_argument('--seq-len', default=50, help='sequence full size')
 parser.add_argument('--datapath',default='./data/SMAP/SMAP/SMAP_train.npy',help='datapath')
-parser.add_argument('--dataset',default="SMAP",help='data')
+parser.add_argument('--dataset',default="PSM",help='data')
 parser.add_argument('--run-grid-search', action='store_true', default=False, help='Running hyper-parameters grid search')
 
 args2 = parser.parse_args(args=[])
@@ -232,7 +232,7 @@ class Diffusion(object):
             testdata = dataset[length:]
 
             ckpt1 = torch.load(
-                './earlysave10/best_newPSM_Transnetwork.pth',
+                './earlysave/best_newPSM_Transnetwork.pth',
                 map_location=self.device)
 
             label = pd.read_csv('./data/PSM/PSM/test_label.csv')
@@ -252,17 +252,17 @@ class Diffusion(object):
 
         #load the TransAE
         ######PSM#########
-        # input_dim = 25   
-        # embed_dim = 64  
-        # num_heads = 4    
-        # num_layers = 1   
-        # ff_dim = 128 
-        ######SMAP#########
         input_dim = 25   
         embed_dim = 64  
-        num_heads = 4   
-        num_layers = 2  
+        num_heads = 4    
+        num_layers = 1   
         ff_dim = 128 
+        ######SMAP#########
+        # input_dim = 25   
+        # embed_dim = 64  
+        # num_heads = 4   
+        # num_layers = 2  
+        # ff_dim = 128 
         ######SWAT########
         # input_dim = 51   # 输入特征维度
         # embed_dim = 64  # 嵌入维度
@@ -319,7 +319,8 @@ class Diffusion(object):
         idwt1d = DWT1DInverse(mode='zero', wave='db1').to(self.device)
 
         model_cd = Model2(config).to(self.device)
-        optimizer_cd = Ranger(params=model_cd.parameters(), lr=self.config.optim.lr, weight_decay=1e-4)
+        # optimizer_cd = Ranger(params=model_cd.parameters(), lr=self.config.optim.lr, weight_decay=1e-4)
+        optimizer_cd = torch.optim.AdamW(params=model_cd.parameters(), lr=self.config.optim.lr, weight_decay=1e-4)
     
 
         if self.config.model.ema:
@@ -535,7 +536,7 @@ class Diffusion(object):
             if getattr(self.config.sampling, "ckpt_id", None) is None:
                #load model
                 states = torch.load(
-                    './earlysave13/best_newSAMP_DMnetwork.pth',
+                    './earlysave/best_newPSM_DMnetwork.pth',
                     map_location=self.config.device)
             else:
                 states = torch.load(
