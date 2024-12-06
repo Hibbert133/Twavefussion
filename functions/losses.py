@@ -12,7 +12,7 @@ def noise_estimation_loss(model,
     x = x0 * a.sqrt() + e * (1.0 - a).sqrt()
 
 
-    output = model(x, t.float()) #预测的噪音
+    output = model(x, t.float()) # Predicted noise
     #print(output.shape)
 
 
