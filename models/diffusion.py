@@ -277,9 +277,9 @@ class Model(nn.Module):
 
         # timestep embedding
         self.temb.dense = nn.ModuleList([
-            torch.nn.Linear(self.ch, self.temb_ch),  # 第一层
-            # torch.nn.Linear(self.temb_ch, self.temb_ch * 2),  # 扩展为两倍
-            torch.nn.Linear(self.temb_ch , self.temb_ch),  # 再次映射回原始维度
+            torch.nn.Linear(self.ch, self.temb_ch), 
+            # torch.nn.Linear(self.temb_ch, self.temb_ch * 2),  
+            torch.nn.Linear(self.temb_ch , self.temb_ch),  
         ])
         
         # downsampling
@@ -289,8 +289,8 @@ class Model(nn.Module):
         curr_res = resolution
 
         in_ch_mult = (1,)+ch_mult
-        self.attn_in_layers_down = []  # 初始化下采样的 attn_in_layers_down
-        self.attn_in_layers_up = []    # 初始化上采样的 attn_in_layers_up
+        self.attn_in_layers_down = []  
+        self.attn_in_layers_up = []   
 
 
         self.down = nn.ModuleList()
@@ -333,8 +333,8 @@ class Model(nn.Module):
                                        out_channels=block_in,
                                        temb_channels=self.temb_ch,
                                        dropout=dropout)
-        self.mid.attn_2 = AttnBlock(block_in)  # 第二次注意力
-        self.mid.block_3 = ResnetBlock(in_channels=block_in,  # 可选的额外 ResNet 块
+        self.mid.attn_2 = AttnBlock(block_in)  
+        self.mid.block_3 = ResnetBlock(in_channels=block_in,  
                                out_channels=block_in,
                                temb_channels=self.temb_ch,
                                dropout=dropout)
