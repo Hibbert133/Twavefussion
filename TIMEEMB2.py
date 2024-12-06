@@ -13,11 +13,11 @@ from TransAE import TransformerAE
 #from TransAE2 import WaveletTransformerAE 
 from train_utils import train_model, eval_model,test_model
 from Unit.utils import get_from_one ,metrics_calculate,anomaly_scoring,evaluate,get_from_all
-from ranger import Ranger
+# from ranger import Ranger
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from early_stopping2 import EarlyStopping
 # from WTConv import WTConv1d 
-early_stopping = EarlyStopping('./earlysave11')
+early_stopping = EarlyStopping('./earlysave')
 
 parser = argparse.ArgumentParser(description='LSTM_AE TOY EXAMPLE')
 parser.add_argument('--batch-size', type=int, default=128, metavar='N',
@@ -34,8 +34,8 @@ parser.add_argument('--log-interval', type=int, default=10, metavar='N', help='h
 parser.add_argument('--model-type', default='TransAE', help='currently only TransAE')
 parser.add_argument('--model-dir', default='trained_models', help='directory of model for saving checkpoint')
 parser.add_argument('--seq-len', default=50, help='sequence full size')
-parser.add_argument('--datapath',default='./data/SMAP',help='datapath')
-parser.add_argument('--dataset',default="SMAP",help='data')
+parser.add_argument('--datapath',default='./data/PSM',help='datapath')
+parser.add_argument('--dataset',default="PSM",help='data')
 parser.add_argument('--run-grid-search', action='store_true', default=False, help='Running hyper-parameters grid search')
 
 args = parser.parse_args(args=[])
@@ -65,11 +65,30 @@ def main():
 
     states = 0
     train_iter, val_iter = create_dataloaders(args.batch_size)
-    input_dim = 25   # 输入特征维度
-    embed_dim = 64  # 嵌入维度
-    num_heads = 4    # 多头注意力的头数
-    num_layers = 2   # 编码器/解码器的层数
-    ff_dim = 128
+######PSM#########
+    input_dim = 25   
+    embed_dim = 64  
+    num_heads = 4    
+    num_layers = 1   
+    ff_dim = 128 
+        ######SMAP#########
+    # input_dim = 25   
+    # embed_dim = 64  
+    # num_heads = 4   
+    # num_layers = 2  
+    # ff_dim = 128 
+        ######SWAT########
+    # input_dim = 51   # 输入特征维度
+    # embed_dim = 64  # 嵌入维度
+    # num_heads = 4    # 多头注意力的头数
+    # num_layers = 1   # 编码器/解码器的层数
+    # ff_dim = 128  
+        ######WADI########
+    # input_dim = 127   # 输入特征维度
+    # embed_dim = 128  # 嵌入维度
+    # num_heads = 8    # 多头注意力的头数
+    # num_layers = 1   # 编码器/解码器的层数
+    # ff_dim = 256  
 
     # Create model
     #model = LSTMAE(input_size=args.input_size, hidden_size=args.hidden_size, dropout_ratio=args.dropout, seq_len=args.seq_len)
@@ -89,8 +108,8 @@ def main():
 
 
     # Create optimizer & loss functions
-    # optimizer = getattr(torch.optim, args.optim)(params=model.parameters(), lr=args.lr, weight_decay=args.wd)
-    optimizer = Ranger(params=model.parameters(), lr=args.lr, weight_decay=args.wd )
+    optimizer = getattr(torch.optim, args.optim)(params=model.parameters(), lr=args.lr, weight_decay=args.wd)
+    # optimizer = Ranger(params=model.parameters(), lr=args.lr, weight_decay=args.wd )
     # 设定学习率调度器
     scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=2)
 
