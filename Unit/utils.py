@@ -147,19 +147,6 @@ def metrics_calculate(values, re_values, labels,mind):
 
     labels = labels.flatten()
 
-    # if preds is None:
-    #     print("Error: preds is None.")
-    #     preds = t.zeros_like(labels[0])  # 设置一个默认的 Tensor
-    # else:
-    #     if t.isnan(preds).any():
-    #         print("NaN values found in preds.")
-    
-    # if t.isnan(preds).any() :
-    #     print("NaN values found in preds ")
-    # # 处理 NaN 值，例如将其替换为 0
-    # preds = t.nan_to_num(preds, nan=0.0)
-    
-
     f1 = f1_score(y_true=labels, y_pred=preds,average='binary',pos_label=1,zero_division=1)
     pre = precision_score(y_true=labels, y_pred=preds,average='binary',pos_label=1)
     re = recall_score(y_true=labels, y_pred=preds,average='binary',pos_label=1)
@@ -199,14 +186,6 @@ def evaluate(labels, scores, step=500, adj=True):
         preds = t.Tensor(preds)
 
         f1 = f1_score(y_true=labels, y_pred=preds)
-
-
-        # if len(set(labels)) > 1 and len(set(preds.numpy())) > 1:
-        #     # 计算f1_score
-        #     f1 = f1_score(y_true=labels, y_pred=preds)
-        # else:
-        #     # 如果只有一个类，跳过该步
-        #     f1 = 0.0
 
         if f1 > best_f1:
 
@@ -257,25 +236,20 @@ def get_from_one(ts, window_size, stride):
 
 def get_from_all(samples, window_size, stride):
     num_samples, window_size_sample, feature_size = samples.shape
-    ts_length = (num_samples - 1) * stride + window_size_sample  # 计算目标序列长度
-    ts_reconstructed = np.zeros((ts_length, feature_size), dtype=np.float64)  # 确保数据类型为浮点数
-    ts_counts = np.zeros(ts_length, dtype=np.float64)  # 用于记录每个位置的叠加次数
-
+    ts_length = (num_samples - 1) * stride + window_size_sample 
+    ts_reconstructed = np.zeros((ts_length, feature_size), dtype=np.float64)  
+    ts_counts = np.zeros(ts_length, dtype=np.float64)  
     for i, sample in enumerate(samples):
         start = i * stride
-        # 确保 sample 是 NumPy 数组并且数据类型正确
         sample = np.asarray(sample, dtype=np.float64)
-        # 对 ts_reconstructed 的切片也进行类型转换
         ts_slice = ts_reconstructed[start:start + window_size_sample]
         ts_slice = np.asarray(ts_slice, dtype=np.float64)
-        # 执行加法操作
         ts_reconstructed[start:start + window_size_sample] = ts_slice + sample
         ts_counts[start:start + window_size_sample] += 1  # 对应位置计数
 
-    # 防止除以 0 并对重叠部分求平均
     ts_counts = np.maximum(ts_counts, 1)
-    ts_counts = ts_counts[:, np.newaxis]  # 扩展维度以进行广播
-    ts_reconstructed /= ts_counts  # 对重叠部分取平均
+    ts_counts = ts_counts[:, np.newaxis]  
+    ts_reconstructed /= ts_counts
 
     return ts_reconstructed
 
@@ -302,4 +276,4 @@ def remove_all_same(train_x, test_x):
 
 
 if __name__ == '__main__':
-  print('ss')
+  #print('ss')
