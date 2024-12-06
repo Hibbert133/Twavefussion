@@ -174,7 +174,7 @@ class Diffusion(object):
         if (args2.dataset == 'SMAP'):
             print('Load SMAP')
             dataset = np.load('./data/SMAP/SMAP/SMAP_train.npy')
-            scaler = MinMaxScaler(feature_range=(0, 1))  # 定义MinMaxScaler并设置范围为0-1
+            scaler = MinMaxScaler(feature_range=(0, 1))  
             dataset = scaler.fit_transform(dataset)
 
             ckpt1 = torch.load('./earlysave10/best_newSMAP_Transnetwork.pth',
@@ -186,18 +186,13 @@ class Diffusion(object):
 
         elif (args2.dataset == 'WADI'):
             print('Load WADI')
-            dataset = np.load('./data/WADI/wadi_train.npy')
-            scaler = StandardScaler()
-
+            dataset = pd.read_csv('./data/WADI/WADI_train.csv')
+            dataset = dataset.fillna(dataset.mean())
+            dataset = dataset.fillna(0)
+            dataset=dataset.values[:, 1:-1]
+            dataset=dataset.astype(np.float32)
+            scaler = MinMaxScaler(feature_range=(0, 1)) 
             dataset = scaler.fit_transform(dataset)
-
-            ckpt1 = torch.load(
-                '',
-                map_location=self.device)
-
-            length= int(dataset.shape[0]*0.8)
-            testdata = dataset[length:]
-            traindata = dataset[:length]
 
         elif (args2.dataset == 'SWAT'):
             print('Load SWAT')
