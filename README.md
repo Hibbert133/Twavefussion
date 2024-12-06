@@ -6,6 +6,7 @@ This repository contains code for the paper, TWavefussion: Wavelet-based Diffusi
 
 ##  Overview
 
+In this paper, TWavefussion, an unsupervised diffusion model for MTS anomaly detection combining wavelet-based diffusion model and transformer autoencoder, is proposed. The wavelet-based diffusion model captures fine-grained local features in the high-frequency components of latent features and helps fuse both local and global MTS features better. Comparative experiments show TWavefussion achieves leading performance on three of four datasets.
 
 ## Datasets
 
@@ -22,11 +23,13 @@ We apply our method on four datasets, the SWAT and WADI datasets, in which we di
 
 > CUDA_VISIBLE_DEVICES = {gpu_id} python main.py  --config test.yml  --doc ./{dataset}  --sequence
 
+For example: CUDA_VISIBLE_DEVICES = 0 python main.py  --config test.yml  --doc ./PSM  --sequence
+
 Then you will train the whole model and will get the reconstructed data and detected score.
 
 ## How to run with your own data
 
-- By default, datasets are placed under the "data" folder. If you need to change the dataset, you can modify the dataset path  in the main file.Then you should change the corresponding parameters of TIMEEMB.py and diffusion.py
+- By default, datasets are placed under the "data" folder. If you need to change the dataset, you can modify the dataset path  in the main file.Then you should change the corresponding parameters of TIMEEMB2.py and diffusion.py
 
 > python main.py  --'dataset'  your dataset
 
