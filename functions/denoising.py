@@ -69,52 +69,6 @@ def ddpm_steps(x, seq, model, b, **kwargs):
             xs.append(sample.to('cpu'))
     return xs, x0_preds
 
-
-
-# def ddim_steps(x, seq, model, transformer, betas, eta=0.0):
-#     with torch.no_grad():
-#         n = x.size(0)
-#         #print(x.shape)
-#         seq_next = [-1] + list(seq[:-1])
-#         xs = [x]
-#         x0_preds = []
-#         for i, j in zip(reversed(seq), reversed(seq_next)):
-#             t = (torch.ones(n) * i).to(x.device)
-#             next_t = (torch.ones(n) * j).to(x.device)
-#             at = compute_alpha(betas, t.long())
-#             atm1 = compute_alpha(betas, next_t.long())
-#             beta_t = 1 - at / atm1
-#             x = xs[-1].to('cuda')
-#             #print(x.shape)
-
-#             # 使用模型预测噪声
-#             output = model(x, t.float())
-#             e = output
-            
-#             # 使用 Transformer 生成动态噪声
-            
-#             custom_noise = generate_custom_noise_with_transformer(x, transformer)
-            
-#             # 使用 DDIM 采样步骤
-#             x0_from_e = (1.0 / at).sqrt() * x - (1.0 / at - 1).sqrt() * e
-#             x0_from_e = torch.clamp(x0_from_e, -1, 1)
-#             x0_preds.append(x0_from_e.to('cpu'))
-
-#             mean_eps = (
-#                 (atm1.sqrt() * beta_t) * x0_from_e + ((1 - beta_t).sqrt() * (1 - atm1)) * x
-#             ) / (1.0 - at)
-
-#             mean = mean_eps
-#             noise = custom_noise  # 使用 Transformer 生成的自定义噪声
-#             mask = 1 - (t == 0).float()
-#             # mask = mask.view(-1, 1, 1, 1)
-#             mask = mask.view(-1, 1, 1)  # 适配 x 的三维形状
-
-#             logvar = beta_t.log()
-#             sample = mean + mask * torch.exp(0.5 * logvar) * noise
-#             xs.append(sample.to('cpu'))
-#     return xs, x0_preds
-
 def generate_custom_noise_with_transformer(x, transformer):
     mean_x, scale_factor_x = transformer(x)
     noise = torch.randn_like(x)
@@ -135,43 +89,25 @@ def ddim_steps(x, seq, model, betas, eta=0.0):
             atm1 = compute_alpha(betas, next_t.long())
             beta_t = 1 - at / atm1
             x = xs[-1].to('cuda')
-
-            # 使用模型预测噪声
             output = model(x, t.float())
             e = output
-
-            # 使用 Transformer 生成动态噪声
-            #custom_noise = generate_custom_noise_with_transformer(x, transformer)
-
-            # 使用 ODE Solver 改进的 DDIM 采样步骤
-            # 使用 OSE（ODE Solving Efficiency）方法，例如Euler或RK4求解器
-            # Predict step: 使用估算的噪声和模型输出
             x0_from_e = (1.0 / at).sqrt() * x - (1.0 / at - 1).sqrt() * e
             x0_from_e = torch.clamp(x0_from_e, -1, 1)
             x0_preds.append(x0_from_e.to('cpu'))
-
-            # Mean prediction step - 用于 ODE 的估计
+            # Mean prediction step 
             mean_eps = (
                 (atm1.sqrt() * beta_t) * x0_from_e + ((1 - beta_t).sqrt() * (1 - atm1)) * x
             ) / (1.0 - at)
 
             mean = mean_eps
-            #noise = custom_noise  # 使用 Transformer 生成的自定义噪声
             noise = torch.randn_like(x)
-            # noise = torch.randn(x.shape[0], x.shape[1], x.shape[2] * 2).to(x.device)
-            # dwt1d = DWT1DForward(J=1, mode='zero', wave='db1').to(x.device)
-            # coeffs_noise = dwt1d(noise)
-            # _, cd__list_noise = coeffs_noise
-            # noise = cd__list_noise[0]
-
-    
-            # Correction step: 根据 ODE 方案进行校正
+            # Correction step:  ODE 
             if i > 0:
-                # 这里可以插入 ODE 校正策略，例如通过 RK4 方法进行微小调整
-                mean = mean + (1 - beta_t).sqrt() * noise  # 简化的欧拉步
+                # Here you can insert ODE correction policies, such as minor adjustments via the RK4 method
+                mean = mean + (1 - beta_t).sqrt() * noise  # Simplified Euler step
 
             mask = 1 - (t == 0).float()
-            mask = mask.view(-1, 1, 1)  # 适配 x 的三维形状
+            mask = mask.view(-1, 1, 1)  
 
             logvar = beta_t.log()
             sample = mean + mask * torch.exp(0.5 * logvar) * noise
