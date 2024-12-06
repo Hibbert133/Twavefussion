@@ -21,9 +21,9 @@ We apply our method on four datasets, the SWAT and WADI datasets, in which we di
 
 - Train and detect:
 
-> CUDA_VISIBLE_DEVICES = {gpu_id} python main.py  --config test.yml  --doc ./{dataset}  --sequence
+> CUDA_VISIBLE_DEVICES={gpu_id} python main.py  --config test.yml  --doc ./{dataset}  --sequence
 
-For example: CUDA_VISIBLE_DEVICES = 0 python main.py  --config test.yml  --doc ./PSM  --sequence
+For example: CUDA_VISIBLE_DEVICES=0 python main.py  --config test.yml  --doc ./PSM  --sequence
 
 Then you will train the whole model and will get the reconstructed data and detected score.
 
