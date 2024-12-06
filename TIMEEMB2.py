@@ -78,16 +78,16 @@ def main():
     # num_layers = 2  
     # ff_dim = 128 
         ######SWAT########
-    # input_dim = 51   # 输入特征维度
-    # embed_dim = 64  # 嵌入维度
-    # num_heads = 4    # 多头注意力的头数
-    # num_layers = 1   # 编码器/解码器的层数
+    # input_dim = 51   
+    # embed_dim = 64  
+    # num_heads = 4    
+    # num_layers = 1   
     # ff_dim = 128  
         ######WADI########
-    # input_dim = 127   # 输入特征维度
-    # embed_dim = 128  # 嵌入维度
-    # num_heads = 8    # 多头注意力的头数
-    # num_layers = 1   # 编码器/解码器的层数
+    # input_dim = 127   
+    # embed_dim = 128  
+    # num_heads = 8    
+    # num_layers = 1  
     # ff_dim = 256  
 
     # Create model
@@ -100,9 +100,9 @@ def main():
     model.to(device)
     #wt = WTConv1d(in_channels= input_dim, out_channels= input_dim).to(device)
 
-    # 打印模型的参数数目
+    
     params = list(model.parameters())
-    print(f"Total number of parameters: {len(params)}")  # 检查参数数目
+    print(f"Total number of parameters: {len(params)}")  
     if len(params) == 0:
        print("Model has no parameters registered.")
 
@@ -138,7 +138,7 @@ def main():
                 print('load SMAP')
                 testdata = np.load('./data/SMAP/SMAP/SMAP_test.npy')
                 testdata = testdata.astype(np.float32)
-                # scaler = MinMaxScaler(feature_range=(0, 1))  # 定义MinMaxScaler并设置范围为0-1
+                # scaler = MinMaxScaler(feature_range=(0, 1))  
                 # testdata = scaler.fit_transform(testdata)    
                 label = np.load('./data/SMAP/SMAP/SMAP_test_label.npy')
                 # testdata = testdata[:135000]
@@ -164,7 +164,7 @@ def main():
                 testdata =testdata.fillna(testdata.mean())
                 testdata = testdata.values[:, 0:-2]
                 testdata = testdata.astype(np.float32)
-                scaler = MinMaxScaler(feature_range=(0, 1))  # 定义MinMaxScaler并设置范围为0-1
+                scaler = MinMaxScaler(feature_range=(0, 1))  
                 testdata = scaler.fit_transform(testdata)
                 label = pd.read_csv('./data/SWAT/SWaT_test.csv')
                 label=label.values[:,-1]
