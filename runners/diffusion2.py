@@ -576,11 +576,11 @@ class Diffusion(object):
             pass
         elif self.args.sequence:
             print("sample")
-            self.sample_sequence(model_ca, model_cd,transz,unet)
+            self.sample_sequence(model_ca, model_cd,transz)
         else:
             raise NotImplementedError("Sample procedeure not defined")
 
-    def sample_sequence(self, model_ca, model_cd,transz,unet):
+    def sample_sequence(self, model_ca, model_cd,transz):
 
         args, config = self.args, self.config
         dwt1d = DWT1DForward(J=1, mode='zero', wave='db1').to(self.device)
