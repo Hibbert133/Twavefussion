@@ -137,23 +137,21 @@ def main():
             if (args.dataset == 'SMAP'):
                 print('load SMAP')
                 testdata = np.load('./data/SMAP/SMAP/SMAP_test.npy')
-                testdata = testdata.astype(np.float32)
-                # scaler = MinMaxScaler(feature_range=(0, 1))  
-                # testdata = scaler.fit_transform(testdata)    
                 label = np.load('./data/SMAP/SMAP/SMAP_test_label.npy')
-                # testdata = testdata[:135000]
-                # label = label[:135000]
+                testdata=testdata.astype(np.float32)
+                scaler = MinMaxScaler(feature_range=(0, 1))  # 定义MinMaxScaler并设置范围为0-1
+                testdata = scaler.fit_transform(testdata)
 
 
 
             elif (args.dataset == 'WADI'):
                 testdata = pd.read_csv('./data/WADI/WADI_test.csv')
+                testdata =testdata.fillna(testdata.mean())
+                testdata =testdata.fillna(0)
                 testdata = testdata.values[:, 1:-1]
                 testdata = testdata.astype(np.float32)
-                testdata = np.nan_to_num(testdata)
-                scaler = StandardScaler()
+                scaler = MinMaxScaler(feature_range=(0, 1))
                 testdata = scaler.fit_transform(testdata)
-                
                 label = pd.read_csv('./data/WADI/WADI_label.csv')
                 label = label.values[:, :]
 
