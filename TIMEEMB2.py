@@ -175,7 +175,7 @@ def main():
                 testdata =testdata.fillna(testdata.mean())
                 testdata = testdata.values[:, 1:]
                 testdata=testdata.astype(np.float32)
-                scaler = MinMaxScaler(feature_range=(0, 1))  # 定义MinMaxScaler并设置范围为0-1
+                scaler = MinMaxScaler(feature_range=(0, 1)) 
                 testdata = scaler.fit_transform(testdata)
                 label = pd.read_csv('./data/PSM/PSM/test_label.csv')
                 label = label.values[:, 1:]
@@ -247,7 +247,7 @@ def create_toy_data(num_of_sequences=10000, sequence_len=64) -> torch.tensor:
             print('Load SMAP')
             toy_data = np.load('./data/SMAP/SMAP/SMAP_train.npy')
             toy_data=toy_data.astype(np.float32)
-            # scaler = MinMaxScaler(feature_range=(0, 1))  # 定义MinMaxScaler并设置范围为0-1
+            # scaler = MinMaxScaler(feature_range=(0, 1)) 
             # toy_data = scaler.fit_transform(toy_data)
             ws = 64
 
@@ -271,7 +271,7 @@ def create_toy_data(num_of_sequences=10000, sequence_len=64) -> torch.tensor:
             toy_data=toy_data.values[:, 0:-1]
             toy_data=toy_data.astype(np.float32)
             
-            scaler = MinMaxScaler(feature_range=(0, 1))  # 定义MinMaxScaler并设置范围为0-1
+            scaler = MinMaxScaler(feature_range=(0, 1))  
             toy_data = scaler.fit_transform(toy_data)
             ws= 64
 
@@ -286,7 +286,7 @@ def create_toy_data(num_of_sequences=10000, sequence_len=64) -> torch.tensor:
             # toy_data = np.nan_to_num(toy_data)
             # scaler = StandardScaler()
             # toy_data = scaler.fit_transform(toy_data)
-            scaler = MinMaxScaler(feature_range=(0, 1))  # 定义MinMaxScaler并设置范围为0-1
+            scaler = MinMaxScaler(feature_range=(0, 1))  
             toy_data = scaler.fit_transform(toy_data)
             ws = 64
 
