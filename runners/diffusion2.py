@@ -14,7 +14,6 @@ import torch.utils.data as data
 from torch.utils.data import DataLoader
 from models.LSTMAE import LSTMAE
 from TransAE import TransformerAE
-from models.Unet import UNet
 from models.diffusion import Model,Model2
 from models.ema import EMAHelper
 from functions import get_optimizer
@@ -23,19 +22,12 @@ from datasets import get_dataset, data_transform, inverse_data_transform
 from functions.ckpt_util import get_ckpt_path
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
-# from ranger import Ranger
 import torchvision.utils as tvu
 import argparse
-# from WTConv import WTConv1d 
 from pytorch_wavelets import DWT1DForward, DWT1DInverse
-# from SelfAtten import AttentionFusionModel
-
-
 from early_stopping2 import EarlyStopping
-# The terminal log output is disabled
-logging.getLogger().handlers.clear()
 
-# 或者添加一个空处理器（不会输出任何东西）
+logging.getLogger().handlers.clear()
 logging.getLogger().addHandler(logging.NullHandler())
 logging.basicConfig(level=logging.WARNING)
 
@@ -90,10 +82,6 @@ def torch2hwcuint8(x, clip=False):
 #     ts_counts = ts_counts[:, np.newaxis] 
 #     ts_reconstructed /= ts_counts  
 #     return ts_reconstructed
-
-
-
-
 
 
 def get_beta_schedule(beta_schedule, *, beta_start, beta_end, num_diffusion_timesteps):
@@ -342,7 +330,6 @@ class Diffusion(object):
 
         for epoch in range(start_epoch, self.config.training.n_epochs):
             earlyloss = 0
-            # print("This is {} epoch\n".format(epoch))
             num=0
             loss_sum=0
 
@@ -352,7 +339,6 @@ class Diffusion(object):
                 x =  x.to(self.device)
                 n = x.size(0)
                 data_time += time.time() - data_start
-                #model_ca.train()
                 model_cd.train()
                 step += 1
                 num+=1
@@ -638,21 +624,10 @@ class Diffusion(object):
             label = label.astype(None)
             label = torch.Tensor(label)
             real_data = torch.Tensor(testdata)
-            # testdata = testdata[:1280]
-            # label = label[:1280]
-            #window data
-            # windowsize = 64
-            # stride = 1
-
-            #testdata = get_from_one(testdata, window_size=windowsize, stride=stride)
 
             dataloader = DataLoader(
                 testdata, batch_size=256, shuffle=True, num_workers=16, drop_last=True,
                 pin_memory=True)
-
-
-
-            
 
             re_datas = []
             i = 0
@@ -698,20 +673,17 @@ class Diffusion(object):
                     re_datas.extend(data)
 
             re_datas = torch.tensor(np.array([item.cpu().detach().numpy() for item in re_datas]))
-            # re_datas = get_from_all(re_datas,window_size=64,stride=1)
-            # re_datas = torch.tensor(re_datas)
             print("The length of the data is {}".format(len(re_datas)))
             label = label[:int(len(re_datas)/len(ts))].cpu().detach().numpy()
             real_data = real_data[:int(len(re_datas)/len(ts))].cpu().detach().numpy()
             re_datas = re_datas.cpu().detach().numpy()
-            torch.save(re_datas, 're_datas_SMAP_v13-R.pt')
+            torch.save(re_datas, f're_datas_{arg2.dataset}.pt')
+
             if len(ts) == 1:
                 mind = None
             else:
                 mind = [0,0,0,1]
             
-           
-
             metrics_calculate(real_data, re_datas, label,mind=mind)
 
 
