@@ -7,11 +7,8 @@ import os
 import yaml
 import argparse
 import torch.nn.functional as F
-# torch.backends.cudnn.enable = True
-# torch.backends.cudnn.benchmark = True
-torch.backends.cudnn.enabled = False
 
-# os.environ['CUDA_LAUNCH_BLOCKING']='1'
+torch.backends.cudnn.enabled = False
 
 def dict2namespace(config):
     namespace = argparse.Namespace()
@@ -166,42 +163,37 @@ class AttnBlock(nn.Module):
         self.proj_out = torch.nn.Conv1d(in_channels, in_channels, kernel_size=1)
 
     def forward(self, x):
-        # 标准化输入
         h_ = self.norm(x)
 
-        # 获取 q, k, v 向量
         q = self.q(h_)
         k = self.k(h_)
         v = self.v(h_)
 
-        # 获取 batch size, 通道数（即总的维度数），长度
         b, c, h = q.shape
 
-        # 将 q, k, v 分成多个头，维度调整为 (batch, num_heads, head_dim, length)
+        # 将 q, k, v Divide into multiple heads and adjust the dimensions to (batch, num_heads, head_dim, length)
         q = q.view(b, self.num_heads, self.head_dim, h)
         k = k.view(b, self.num_heads, self.head_dim, h)
         v = v.view(b, self.num_heads, self.head_dim, h)
 
-        # 转置 q 和 k，维度调整为 (batch, num_heads, length, head_dim)
+        # Transpose q and k and adjust the dimensions to (batch, num_heads, length, head_dim)
         q = q.permute(0, 1, 3, 2)  # (b, num_heads, h, head_dim)
         k = k.permute(0, 1, 2, 3)  # (b, num_heads, head_dim, h)
 
-        # 计算注意力权重
+        # Calculating attention weight
         w_ = torch.matmul(q, k) * (self.head_dim ** -0.5)  # (b, num_heads, h, h)
-        w_ = torch.nn.functional.softmax(w_, dim=-1)  # 在最后一个维度上进行 softmax
+        w_ = torch.nn.functional.softmax(w_, dim=-1)  # Do softmax on the last dimension
 
-        # 应用注意力权重到 v
+        # Apply attention weight to v
         v = v.permute(0, 1, 3, 2)  # (b, num_heads, h, head_dim)
         attn_output = torch.matmul(w_, v)  # (b, num_heads, h, head_dim)
         attn_output = attn_output.permute(0, 1, 3, 2).contiguous()  # (b, num_heads, head_dim, h)
 
-        # 将多个头的输出拼接起来 (batch, in_channels, length)
+        # Concatenate the output of multiple heads (batch, in_channels, length)
         attn_output = attn_output.view(b, c, h)
 
-        # 输出投影
         h_ = self.proj_out(attn_output)
 
-        # 跳跃连接
         return x + h_
 
 # class AttnBlock(nn.Module):
@@ -309,7 +301,7 @@ class Model(nn.Module):
                                          dropout=dropout))
                 block_in = block_out
                 has_attn = curr_res in attn_resolutions
-                attn_in_blocks.append(has_attn)  # 记录当前块是否有注意力模块
+                attn_in_blocks.append(has_attn) 
                 if has_attn:
                     attn.append(AttnBlock(block_in))
                     print(f"Down Added AttnBlock at resolution {curr_res}, level {i_level}, block {i_block}")
@@ -421,6 +413,7 @@ class Model(nn.Module):
         h = self.mid.block_3(h, temb)
 
         #print("attn_in_layers_up before upsampling:", self.attn_in_layers_up)
+        
         # upsampling
         for i_level in reversed(range(self.num_resolutions)):
             attn_idx = 0
