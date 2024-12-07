@@ -6,17 +6,12 @@ import numpy as np
 import torch
 from torch.utils.data import DataLoader ,TensorDataset
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
-
 from torch import optim
-# from models.LSTMAE import LSTMAE
 from TransAE import TransformerAE
-#from TransAE2 import WaveletTransformerAE 
 from train_utils import train_model, eval_model,test_model
 from Unit.utils import get_from_one ,metrics_calculate,anomaly_scoring,evaluate,get_from_all
-# from ranger import Ranger
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from early_stopping2 import EarlyStopping
-# from WTConv import WTConv1d 
 early_stopping = EarlyStopping('./earlysave')
 
 parser = argparse.ArgumentParser(description='LSTM_AE TOY EXAMPLE')
@@ -287,20 +282,8 @@ def create_toy_data(num_of_sequences=10000, sequence_len=64) -> torch.tensor:
             scaler = MinMaxScaler(feature_range=(0, 1))  
             toy_data = scaler.fit_transform(toy_data)
             ws = 64
-
-    # print('Load WADI')
-    # toy_data = np.load('./data/WADI/WADI_train.npy',allow_pickle=True)
-    # toy_data = np.nan_to_num(toy_data)
-    # scaler = StandardScaler()
-    # toy_data = scaler.fit_transform(toy_data)
-    # length = int(len(toy_data))
-    # toy_data = toy_data[:length]
-    # print(toy_data.shape)
     toy_data = get_from_one(toy_data,window_size=ws,stride=1)
-    # print(toy_data.shape)
     toy_data = torch.tensor(toy_data).float()
-
-
     return toy_data
 
 
