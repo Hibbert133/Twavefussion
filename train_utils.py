@@ -7,17 +7,6 @@ from WTConv2 import WTConv1d
 from runners.diffusion import AttentionFusionModel
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-def wtconv(x, scale_factor=1):
-    """
-    从输入时间序列 x 中提取低频或趋势信息
-    :param x: 输入时间序列，形状为 [batch_size, num_features, sequence_length]
-    :return: 提取出的低频分量
-    """
-    device = x.device
-    WTconv = WTConv1d(in_channels= x.shape[1]).to(device)
-    #print(x.shape)
-    x = WTconv(x)
-    return scale_factor*x
 
 def train_model(criterion, epoch, model,model_type, optimizer, train_iter, batch_size, clip_val, log_interval=10, scheduler=None):
     """
