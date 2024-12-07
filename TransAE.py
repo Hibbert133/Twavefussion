@@ -30,7 +30,7 @@ class AttentionDecoder(nn.Module):
             d_model=ff_dim, nhead=num_heads, dim_feedforward=ff_dim, dropout=dropout
         )
         self.decoder = nn.TransformerDecoder(self.decoder_layer, num_layers=num_layers)
-        self.output_layer = nn.Linear(ff_dim, output_dim)  # 调整输出为 [batch_size, seq_length, output_dim]
+        self.output_layer = nn.Linear(ff_dim, output_dim)  #  [batch_size, seq_length, output_dim]
         self.use_act = use_act
         self.act = nn.Sigmoid() if use_act else nn.Identity()
 
@@ -73,23 +73,19 @@ class TransformerAE(nn.Module):
             x_dec = self.decoder(x, x) 
             return x_dec
 
-# # # 使用示例
-# input_dim = 25   # 输入特征维度
-# embed_dim = 128  # 嵌入维度
-# num_heads = 4    # 多头注意力的头数
-# num_layers = 3   # 编码器/解码器的层数
-# ff_dim = 256     # 前馈神经网络的隐藏层维度
+# # # 
+# input_dim = 25  
+# embed_dim = 128  
+# num_heads = 4   
+# num_layers = 3  
+# ff_dim = 256     
 
-# # 初始化模型
+
 # model = TransformerAE(input_dim=input_dim, embed_dim=embed_dim, num_heads=num_heads,
 #                       num_layers=num_layers, ff_dim=ff_dim)
 
-# # 示例输入，形状为 [batch_size, seq_length, input_dim]
+# # [batch_size, seq_length, input_dim]
 # x = torch.randn(128, 64, 25)  # [128, 64, 25]
-
-# # 前向传播
 # output = model(x, flag='all')
-
-# # 查看输出形状
-# print("Output shape:", output.shape)  # 输出应为 [128, 64, 25]
+# print("Output shape:", output.shape)  #  [128, 64, 25]
 
