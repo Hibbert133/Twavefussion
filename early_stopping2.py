@@ -90,7 +90,7 @@ class EarlyStopping:
         '''Saves model when validation loss decrease.'''
         if self.verbose:
             print(f'Validation loss decreased ({self.val_loss_min:.6f} --> {val_loss:.6f}).  Saving model ...')
-        path = os.path.join(self.save_path, 'best_newSAMP_DMnetwork.pth')#best_newPSM_DMnetwork.pth
+        path = os.path.join(self.save_path, 'best_newPSM_DMnetwork.pth')#best_newPSM_DMnetwork.pth
         torch.save(states, path)
 
         self.val_loss_min = val_loss
@@ -101,7 +101,7 @@ class EarlyStopping:
             print(f'Validation loss decreased ({self.val_loss_min:.6f} --> {val_loss:.6f}).  Saving model ...')
         
         os.makedirs(self.save_path, exist_ok=True)
-        path = os.path.join(self.save_path, 'best_newSMAP_Transnetwork.pth')#best_newPSM_network.pth
+        path = os.path.join(self.save_path, 'best_newPSM_Transnetwork.pth')#best_newPSM_network.pth
         torch.save(model.state_dict(), path)
         self.val_loss_min = val_loss
     
