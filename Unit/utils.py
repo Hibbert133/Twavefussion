@@ -93,44 +93,37 @@ def anomaly_scoring(values, reconstruction_values):
 
     return t.Tensor(scores)
 
-def metrics_calculates(values, re_values, labels):
+# def metrics_calculates(values, re_values, labels):
 
 
-    scores = anomaly_scoring(values, re_values)
+#     scores = anomaly_scoring(values, re_values)
 
 
 
-    preds, _ = evaluate(labels, scores,adj=False)
+#     preds, _ = evaluate(labels, scores,adj=False)
     
-    preds_,_ = evaluate(labels, scores,adj=True)
+#     preds_,_ = evaluate(labels, scores,adj=True)
     
-    print(preds_.shape)
+#     print(preds_.shape)
 
 
 
-    f1 = f1_score(y_true=labels, y_pred=preds)
-    pre = precision_score(y_true=labels, y_pred=preds)
-    re = recall_score(y_true=labels, y_pred=preds)
+#     f1 = f1_score(y_true=labels, y_pred=preds)
+#     pre = precision_score(y_true=labels, y_pred=preds)
+#     re = recall_score(y_true=labels, y_pred=preds)
 
-    f1_ = f1_score(y_true=labels, y_pred=preds_)
-    pre_ = precision_score(y_true=labels, y_pred=preds_)
-    re_ = recall_score(y_true=labels, y_pred=preds_)
+#     f1_ = f1_score(y_true=labels, y_pred=preds_)
+#     pre_ = precision_score(y_true=labels, y_pred=preds_)
+#     re_ = recall_score(y_true=labels, y_pred=preds_)
 
-    auc = roc_auc_score(y_true=labels, y_score=normalize(scores))
+#     auc = roc_auc_score(y_true=labels, y_score=normalize(scores))
 
-    print('F1 score is [%.5f / %.5f] (before adj / after adj), auc score is %.5f.' % (f1, f1_, auc))
-    print('Precision score is [%.5f / %.5f], recall score is [%.5f / %.5f].' % (pre, pre_, re, re_))
+#     print('F1 score is [%.5f / %.5f] (before adj / after adj), auc score is %.5f.' % (f1, f1_, auc))
+#     print('Precision score is [%.5f / %.5f], recall score is [%.5f / %.5f].' % (pre, pre_, re, re_))
 
-    return f1_
+#     return f1_
 
 def metrics_calculate(values, re_values, labels,mind):
-    #SMAP mind=[0.1,0.2,0.3,0.4]
-    #PSM mind = [0.1,0.2,0.3,0.4]
-    #SWAT mind = [0.25,0.25,0.25,0.25]
-    #WADI mind = [0.25,0.25,0.25,0.25]
-
-    # mind = [0.1,0.2,0.3,0.4]
-    # mind=[0.0,0.0,0.0,1.0]
     if mind is None:
         scores = anomaly_scoring(values, re_values)
     else:
