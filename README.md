@@ -29,7 +29,9 @@ Then you will train the whole model and will get the reconstructed data and dete
 
 ## How to run with your own data
 
-- By default, datasets are placed under the "data" folder. If you need to change the dataset, you can modify the dataset path  in the main file.Then you should change the corresponding parameters of diffusion2.py in runners fold and TIMEEMB2.py.
+- By default, datasets are placed under the "data" folder. If you need to change the dataset, you can modify the dataset path  in the main file. Then you should change the corresponding parameters of diffusion2.py in runners fold, TIMEEMB2.py and TransAE.py.
+- diffusion2.py for wavefussion part.
+-  TIMEEMB2.py and  TransAE.py for Transformer part. Note TransAE.py can adjust the dimension of the latent variable Z.
 
 > python main.py  --'dataset'  your dataset
 
